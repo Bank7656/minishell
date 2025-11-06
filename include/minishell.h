@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 14:14:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/03 11:32:46 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/06 02:35:19 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_redir
 {
 	e_token_type	type;	
 	char			*value;
+    struct s_redir  *next;
 }	t_redir;
 
 

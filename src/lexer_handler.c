@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 02:52:06 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/05 02:52:51 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/05 18:41:12 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int  handle_redir_token(t_token **head, char *line, int i)
 
 int  handle_and_token(t_token **head, char *line, int i)
 {
-    if (line[i + 1] == '&' && line[i + 1] == '\0')
+    if (line[i + 1] == '&' && line[i + 1] != '\0')
     {
         add_token_to_lst(head, create_token(AND, "&&"));
         return (2);
