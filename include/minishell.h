@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 14:14:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/06 02:35:19 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/07 21:38:29 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,17 @@ typedef struct s_ast_node
 	struct s_ast_node	*left;    
 	struct s_ast_node	*right;
 	char				**args;
-	t_list				*redir;
+	t_redir				*redir;
 } t_ast_node;
 
+
+t_ast_node      *parse_command(t_token **tokens);
+t_ast_node      *parse_subshell(t_token **tokens);
+t_ast_node      *parse_pipe(t_token **tokens);
+t_ast_node      *parse_logical(t_token **tokens);
+
+void    free_redir_list(t_redir *redir_list);
+void    free_ast_tree(t_ast_node *node);
+void    free_args_array(char **args);
 
 #endif

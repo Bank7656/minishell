@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:57:20 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/05 18:40:30 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/08 01:46:47 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,7 @@ int handle_word(t_token **head, char *line, int i)
 			i++;
 		}
 		if (line[i] == '\0')
-		{
-			// printf("minishell: syntax error: unclosed quote\n");
-			// free_token_list(&head); // Free what we've lexed so far
 			return (0);
-		}
 		i++;
 	}
 	else
@@ -93,6 +89,7 @@ int handle_word(t_token **head, char *line, int i)
 		return (0);
 	}
 	add_token_to_lst(head, create_token(WORD, word)); 
+    free(word);
 	return (i - start_index);
 }
 

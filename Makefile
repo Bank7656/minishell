@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror
 
 SRC_DIR = src/
 OBJ_DIR = objects/
@@ -18,7 +18,12 @@ SRC = main.c \
 	lexer.c \
 	lexer_handler.c \
 	lexer_utils_char.c \
-	lexer_utils_list.c
+	lexer_utils_list.c \
+	parse_command.c \
+	parse_pipe.c \
+	parse_logical.c \
+	parse_subshell.c \
+	clear.c
 
 OBJECTS = $(SRC:.c=.o)
 
