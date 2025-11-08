@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -g -Wall -Wextra -Werror
+# CFLAGS = -g -Wall -Wextra -Werror
 
 SRC_DIR = src/
 OBJ_DIR = objects/
@@ -23,6 +23,13 @@ SRC = main.c \
 	parse_pipe.c \
 	parse_logical.c \
 	parse_subshell.c \
+	envp.c \
+	envp_utils.c \
+	execute.c \
+	execute_command.c \
+	execute_pipeline.c \
+	execute_subshell.c \
+	debug.c \
 	clear.c
 
 OBJECTS = $(SRC:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:57:20 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/08 01:46:47 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 00:16:01 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int  handle_metacharacter(t_token **head, char *line, int i)
 {
 	if (line[i] == '|')
 		return (handle_pipe_token(head, line, i));
-	else if (line[i] == '<' || line[i] == '<')
+	else if (line[i] == '<' || line[i] == '>')
 		return (handle_redir_token(head, line, i));
 	else if (line[i] == '&')
 		return (handle_and_token(head, line, i));

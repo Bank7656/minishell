@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:22:55 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/08 02:03:54 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 02:43:23 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ int main(int argc, char **argv, char **envp)
     t_token     *token;
     t_token     *head;
     t_ast_node  *ast_tree;
+    t_env       *env_lst;
 
     (void) argc;
     (void) argv;
     (void) envp;
+    env_lst = init_env(envp);
     while (true)
     {
         line = readline("> ");
@@ -38,12 +40,13 @@ int main(int argc, char **argv, char **envp)
         token = lexer(line);
         head = token;
         ast_tree = parse_logical(&token);
-        
-        (void)ast_tree;
+       
+        // print_ast(ast_tree);
+        // print_token(head);
+        // (void)ast_tree;
         // 3. EXECUTE
-        // execute_ast(ast_tree);
+        execute_ast(ast_tree, &env_lst);
 
-        // print_token(token);
         // 4. CLEANUP
         free_token_list(head);
         free_ast_tree(ast_tree);

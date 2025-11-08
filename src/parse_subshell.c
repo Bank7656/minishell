@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 02:39:22 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/08 01:00:57 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/08 16:11:18 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ t_ast_node *parse_subshell(t_token **tokens)
     t_ast_node *node;
     t_ast_node *subshell_node;
 
-    if (*tokens != NULL && (*tokens) -> type == LPAREN)
+    if (*tokens == NULL)
+        return (NULL);
+    if ((*tokens) -> type == LPAREN)
     {
         *tokens = (*tokens) -> next;
         node = parse_logical(tokens);
