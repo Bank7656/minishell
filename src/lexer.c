@@ -6,13 +6,13 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:57:20 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 00:16:01 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 16:01:43 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-t_token  *lexer(char *line)
+t_token  *lexer(t_shell *shell, char *line)
 {
 	int         i;
 	t_token     *head;
@@ -28,10 +28,10 @@ t_token  *lexer(char *line)
 		}
 		if (line[i] == '\0')
 			break;
-		len = handle_metacharacter(&head, line, i);
+		len = handle_metacharacter(shell, &head, line, i);
 		if (len == 0)
 		{
-			len = handle_word(&head, line, i);
+			len = handle_word(shell, &head, line, i);
 		}
 		if (len == 0)
 			return (lexer_error(head, "syntax error"));
@@ -41,21 +41,21 @@ t_token  *lexer(char *line)
 	return (head);
 }
 
-int  handle_metacharacter(t_token **head, char *line, int i)
+int  handle_metacharacter(t_shell *shell, t_token **head, char *line, int i)
 {
 	if (line[i] == '|')
-		return (handle_pipe_token(head, line, i));
+		return (handle_pipe_token(shell, head, line, i));
 	else if (line[i] == '<' || line[i] == '>')
-		return (handle_redir_token(head, line, i));
+		return (handle_redir_token(shell, head, line, i));
 	else if (line[i] == '&')
-		return (handle_and_token(head, line, i));
+		return (handle_and_token(shell, head, line, i));
 	else if (line[i] == '(' || line[i] == ')')
-		return (handle_paren_token(head, line, i));
+		return (handle_paren_token(shell, head, line, i));
 	else
 		return (0);
 }
 
-int handle_word(t_token **head, char *line, int i)
+int handle_word(t_shell *shell, t_token **head, char *line, int i)
 {
 	int     start_index;
 	char    quote_char;

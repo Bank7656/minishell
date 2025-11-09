@@ -2,6 +2,7 @@ NAME = minishell
 
 CC = cc
 # CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g
 
 SRC_DIR = src/
 OBJ_DIR = objects/
@@ -28,6 +29,7 @@ SRC = main.c \
 	execute.c \
 	execute_command.c \
 	execute_pipeline.c \
+	execute_logical.c \
 	execute_subshell.c \
 	debug.c \
 	clear.c

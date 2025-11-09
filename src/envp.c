@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 03:07:10 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/08 03:26:52 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 16:54:04 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ t_env   *init_env(char **envp)
 		splitted = ft_split(envp[i], '='); 
 		if (splitted == NULL)
         {
-            clear_env_list(env_list);
+            free_env_list(env_list);
 			return (NULL);
         }
         env_node = create_env_node(splitted);
         if (env_node == NULL)
         {
             free_args_array(splitted);
-            clear_env_list(env_list);
+            free_env_list(env_list);
             return (NULL);
         }
-        free(splitted);
+        free_args_array(splitted);
         add_env_to_list(&env_list, env_node);  
 		i++;
 	}
@@ -53,8 +53,13 @@ t_env *create_env_node(char **splitted)
     env_node = (t_env *)malloc(sizeof(t_env));
     if (env_node == NULL)
         return (NULL);
-    env_node -> name = splitted[0];
-    env_node -> value = splitted[1];
+    env_node -> name = ft_strdup(splitted[0]);
+    env_node -> value = ft_strdup(splitted[1]);
+    if (env_node -> name == NULL || env_node -> value == NULL)
+    {
+        free(env_node);
+        return (NULL);
+    }
     env_node -> next = NULL;
     return (env_node);
 }
@@ -78,12 +83,12 @@ void    add_env_to_list(t_env **head, t_env *env_node)
     }
 }
 
-void clear_env_list(t_env *env_list)
+void free_env_list(t_env *env_list)
 {
     t_env *trav;
 
     trav = env_list;
-    while (env_list != NULL)
+    while (trav != NULL)
     {
         env_list = env_list -> next;
         free(trav -> name);

@@ -6,13 +6,13 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 20:34:04 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 02:38:08 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 14:31:24 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int     execute_pipeline(t_ast_node *node, t_env **env_lst)
+int     execute_pipeline(t_shell *shell, t_ast_node *node)
 {
     int pipe_fd[2];    
     int status;
@@ -36,7 +36,7 @@ int     execute_pipeline(t_ast_node *node, t_env **env_lst)
         dup2(pipe_fd[1], 1);
         close(pipe_fd[0]);
         close(pipe_fd[1]);
-        exit_status = execute_ast(node->left, env_lst);
+        exit_status = execute_ast(shell, node->left);
         exit(exit_status);
     }
     right_pid = fork();
@@ -50,23 +50,18 @@ int     execute_pipeline(t_ast_node *node, t_env **env_lst)
         dup2(pipe_fd[0], 0);
         close(pipe_fd[0]);
         close(pipe_fd[1]);
-        exit_status = execute_ast(node->right, env_lst);
+        exit_status = execute_ast(shell, node->right);
         exit(exit_status);
     }
     close(pipe_fd[0]);
     close(pipe_fd[1]);
-    waitpid(left_pid, &status, 0);
-    waitpid(right_pid, &status, 0);
+    waitpid(-1, &status, 0);
+    waitpid(-1, &status, 0);
     if (WIFEXITED(status))
-    {
         exit_status = WEXITSTATUS(status);
-    }
-    else if (WEXITSTATUS(status))
-    {
+    else if (WIFSIGNALED(status))
         exit_status = 128 + WTERMSIG(status);
-    }
     else
-    {
         exit_status = 1;
-    }
+    return (exit_status);
 }

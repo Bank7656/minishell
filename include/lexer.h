@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:15:35 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/05 02:47:59 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 16:04:58 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "minishell.h"
 
 /* --- 1. Main Public Function --- */
-t_token		*lexer(char *line);
+t_token		*lexer(t_shell *shell, char *line);
 
 /* --- 2. Error & Cleanup Functions (Public) --- */
 void		free_token_list(t_token *head);
@@ -32,13 +32,13 @@ t_token		*create_token(e_token_type token_type, char *value);
 void		add_token_to_lst(t_token **head, t_token *token);
 
 // From lexer_handlers.c
-int			handle_pipe_token(t_token **head, char *line, int i);
-int			handle_redir_token(t_token **head, char *line, int i);
-int			handle_and_token(t_token **head, char *line, int i);
-int			handle_paren_token(t_token **head, char *line, int i);
+int			handle_pipe_token(t_shell *shell, t_token **head, char *line, int i);
+int			handle_redir_token(t_shell *shell, t_token **head, char *line, int i);
+int			handle_and_token(t_shell *shell, t_token **head, char *line, int i);
+int			handle_paren_token(t_shell *shell, t_token **head, char *line, int i);
 
 // From lexer.c
-int			handle_metacharacter(t_token **head, char *line, int i);
-int			handle_word(t_token **head, char *line, int i);
+int			handle_metacharacter(t_shell *shell, t_token **head, char *line, int i);
+int			handle_word(t_shell *shell, t_token **head, char *line, int i);
 
 #endif

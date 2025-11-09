@@ -6,25 +6,20 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 13:28:51 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 02:40:35 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 14:19:53 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int execute_command(t_ast_node *node, t_env **env_lst)
+int execute_command(t_shell *shell, t_ast_node *node)
 {
 	pid_t	pid;
-	int     pipe_fd[2];
     char    *full_path_cmd;
     char    **envp;
     int     status;
+	int		exit_status;
 
-	if (pipe(pipe_fd) == -1)
-    {
-        perror("pipe");
-		return (-1);
-    }
 	pid = fork();
 	if (pid == -1)
 	{
@@ -33,27 +28,34 @@ int execute_command(t_ast_node *node, t_env **env_lst)
 	}
 	else if (pid == 0)
 	{
-        full_path_cmd = get_full_command_path(node -> args[0], *env_lst);
+        full_path_cmd = get_full_command_path(node -> args[0], shell -> env_lst);
         if (full_path_cmd == NULL)
-            return (-1);
+            exit(127);
         
-        envp = convert_env_to_array(*env_lst);
+        envp = convert_env_to_array(shell -> env_lst);
         if (envp == NULL)
         {
             free(full_path_cmd);
-            return (-1);
+            exit(EXIT_FAILURE);
         }
         if (execve(full_path_cmd, node -> args, envp) == -1)
         {
+			perror("execve");
             free_args_array(envp);
             free(full_path_cmd);
-            return (-1);
+            exit(EXIT_FAILURE);
         }
 	}
 	else
 	{
         waitpid(pid, &status, 0);
-		return (-1);
+		if (WIFEXITED(status))
+			exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			exit_status = 128 + WTERMSIG(status);
+		else
+			exit_status = 1;
+		return (exit_status);
 	}
     return (-1);
 }
@@ -119,6 +121,5 @@ char    **get_env_path(t_env *env_lst)
     split_paths = ft_split(path_string, ':');
 	if (split_paths == NULL)
 		return (NULL);
-
 	return (split_paths);
 }
