@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 02:39:22 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/08 16:11:18 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/13 05:07:43 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_ast_node *parse_subshell(t_token **tokens)
         node = parse_logical(tokens);
         if ((*tokens) == NULL || (*tokens) -> type != RPAREN)
         {
-            // display err
+            ft_putendl_fd("minishell: unclosed parenthesis", 2);
             free_ast_tree(node);
             return (NULL);
         }

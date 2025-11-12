@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 18:45:06 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/08 01:20:37 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/13 05:03:20 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_ast_node    *parse_command(t_token **tokens)
 	t_list		*arg_list;
 	t_redir		*redir_list;
 	t_ast_node	*cmd_node;
-	
+
 	arg_list = NULL;
 	redir_list = NULL;
 	while (*tokens != NULL && !is_command_end(*tokens))
@@ -147,7 +147,10 @@ int     parse_redirection(t_token **tokens, t_redir **redir_list)
 	t_redir *redir_node;
 
 	if ((*tokens) -> next == NULL || (*tokens) -> next ->type != WORD)
+    {
+        ft_putendl_fd("minishell: syntax error near unexpected token `newline'", 2);
 		return (0);
+    }
 	redir_node  = malloc(sizeof(t_redir));
 	if (redir_node == NULL)
 		return (0);

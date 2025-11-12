@@ -6,21 +6,22 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 02:43:23 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/08 01:48:18 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 18:10:12 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
 
-t_token *create_token(e_token_type token_type, char *value)
+t_token *create_token(t_shell *shell, e_token_type token_type, char *value)
 {
     t_token *token;
 
     token = (t_token *)malloc(sizeof(t_token));
     if (token == NULL)
     {
-        perror("Malloc");
+        perror("malloc");
+        free_and_exit(shell, 1);
         return (NULL);
     }
     token -> type = token_type;
@@ -29,7 +30,8 @@ t_token *create_token(e_token_type token_type, char *value)
     if (token -> value == NULL && value != NULL)
     {
         free(token);
-        perror("Malloc");
+        perror("malloc");
+        free_and_exit(shell, 1);
         return (NULL);
     }
     return (token);

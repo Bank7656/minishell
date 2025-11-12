@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:15:35 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 16:04:58 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 17:23:41 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int			ft_isspace(int c);
 int			ft_ismetacharacter(int c);
 
 // From lexer_utils_list.c
-t_token		*create_token(e_token_type token_type, char *value);
+t_token		*create_token(t_shell *shell, e_token_type token_type, char *value);
 void		add_token_to_lst(t_token **head, t_token *token);
 
 // From lexer_handlers.c

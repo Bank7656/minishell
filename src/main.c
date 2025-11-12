@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:22:55 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 17:00:58 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/13 05:01:36 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,54 +18,70 @@ void    print_token(t_token *token);
 
 int main(int argc, char **argv, char **envp)
 {
-    char        *line;
     t_token     *token;
     t_shell     *shell;
 
     (void) argc;
     (void) argv;
     shell = init_shell(envp);
-    shell -> is_inloop = 1;
     while (true)
     {
-        line = readline("> ");
-        if (line == NULL)
+        shell -> line = readline("> ");
+        if (shell -> line == NULL)
             break;
-        if (line[0] != '\0')
-            add_history(line);
-        token = lexer(shell, line);
+        if (shell -> line[0] != '\0')
+            add_history(shell -> line);
+        token = lexer(shell, shell -> line);
         shell -> token_head = token;
+        if (shell -> token_head == NULL)
+        {
+            free_inloop(shell);
+            continue;
+        }
+        print_token(shell -> token_head);
         shell -> ast_root = parse_logical(&token);
-
+        if (shell -> ast_root == NULL)
+        {
+            free_inloop(shell);
+            continue ;
+        }
         // Debugging !!
         // print_ast(ast_tree);
         // print_token(head);
         // End Debugging !!
-
         execute_ast(shell, shell -> ast_root);
-        free_shell(shell); 
-        free(line);
+        free_inloop(shell); 
     }
-    shell -> is_inloop = 0;
-    free_shell(shell);
     printf("exit\n");
+    free_and_exit(shell, 0);
     return (0);
 }
 
-void    free_shell(t_shell *shell)
+void    free_inloop(t_shell *shell)
 {
     if (shell == NULL)
         return ;
-    if (shell -> is_inloop)
-    {
+    if (shell -> line != NULL)
+        free(shell -> line);
+    if (shell -> token_head != NULL)
         free_token_list(shell -> token_head);
+    if (shell -> ast_root != NULL)
         free_ast_tree(shell -> ast_root);
-    }
-    else
+    shell -> line = NULL;
+    shell -> token_head = NULL;
+    shell -> ast_root = NULL;
+}
+
+void    free_and_exit(t_shell *shell, int exit_code)
+{
+    if (shell != NULL)
     {
-        free_env_list(shell -> env_lst);
+        free_inloop(shell);
+        if (shell -> env_lst != NULL)
+            free_env_list(shell -> env_lst);
         free(shell);
     }
+    exit(exit_code);
 }
 
 t_shell *init_shell(char **envp)

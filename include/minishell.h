@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 14:14:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 16:50:23 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/09 18:08:35 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct s_ast_node
 
 typedef struct s_shell
 {
-    int         is_inloop;
+    char        *line;
 	t_token     *token_head;
 	t_env       *env_lst;
 	t_ast_node  *ast_root;
@@ -117,7 +117,8 @@ int				execute_or(t_shell *shell, t_ast_node *node);
 int				execute_subshell(t_shell *shell, t_ast_node *node);
 
 
-void            free_shell(t_shell *shell);
+void            free_inloop(t_shell *shell);
+void            free_and_exit(t_shell *shell, int exit_code);
 
 //debug
 void	print_ast(t_ast_node *node);

@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 02:15:17 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/07 02:32:57 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/13 05:07:27 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_ast_node  *parse_logical(t_token **tokens)
         (*tokens) = (*tokens) -> next;
         if (*tokens == NULL)
         {
-            ft_putendl_fd("syntax error near unexpected token 'newline'", 2);
+            ft_putendl_fd("minishell: syntax error near unexpected token 'newline'", 2);
             free_ast_tree(left_node);
             return (NULL);
         }
