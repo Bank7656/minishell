@@ -28,6 +28,7 @@ SRC = main.c \
 	envp_utils.c \
 	execute.c \
 	execute_command.c \
+	execute_redirections.c \
 	execute_pipeline.c \
 	execute_logical.c \
 	execute_subshell.c \

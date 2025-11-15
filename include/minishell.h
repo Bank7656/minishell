@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 14:14:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/15 21:18:48 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/16 01:52:50 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define STDOUT_FILENO 1
 # define STDERR_FILENO 2
 
+# include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
@@ -117,6 +118,7 @@ char			*check_each_path(char *cmd, char *path);
 
 int				execute_ast(t_shell *shell, t_ast_node *node);
 int				execute_command(t_shell *shell, t_ast_node *node);
+int handle_redirections(t_redir *redir_lst);
 int				execute_pipeline(t_shell *shell, t_ast_node *node);
 int				execute_and(t_shell *shell, t_ast_node *node);
 int				execute_or(t_shell *shell, t_ast_node *node);

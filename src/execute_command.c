@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 13:28:51 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/15 20:06:32 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/16 02:29:01 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,35 @@ int is_builtin(char *cmd)
         return (0);
 }
 
+int execute_empty_command(t_shell *shell, t_ast_node *node)
+{
+	pid_t	pid;
+    int     status;
+	int		exit_status;
+
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("fork");
+        return (1);
+    }
+    if (pid == 0)
+    {        
+        if (handle_redirections(node -> redir) == -1)
+            exit(1);
+        exit(0);
+    }
+    else
+    {
+        waitpid(pid, &status, 0);
+        if (WIFEXITED(status))
+            exit_status = WEXITSTATUS(status);
+        else
+            exit_status = 1;
+        return (exit_status);
+    }
+}
+
 int execute_command(t_shell *shell, t_ast_node *node)
 {
 	pid_t	pid;
@@ -40,6 +69,8 @@ int execute_command(t_shell *shell, t_ast_node *node)
     int     status;
 	int		exit_status;
 
+    if (node -> args[0] == NULL)
+        return (execute_empty_command(shell, node));
     if (is_builtin(node -> args[0]))
         return (execute_builtin(shell, node));
 	pid = fork();
@@ -50,9 +81,18 @@ int execute_command(t_shell *shell, t_ast_node *node)
 	}
 	else if (pid == 0)
 	{
+        if (handle_redirections(node -> redir) == -1)
+        {
+            exit(1);
+        }
         full_path_cmd = get_full_command_path(node -> args[0], shell -> env_lst);
         if (full_path_cmd == NULL)
+        {
+            ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(node->args[0], 2);
+			ft_putendl_fd(": command not found", 2);
             exit(127);
+        }
         
         envp = convert_env_to_array(shell -> env_lst, ENV);
         if (envp == NULL)
@@ -65,7 +105,7 @@ int execute_command(t_shell *shell, t_ast_node *node)
 			perror("execve");
             free_args_array(envp);
             free(full_path_cmd);
-            exit(EXIT_FAILURE);
+            exit(126);
         }
 	}
 	else
@@ -81,6 +121,7 @@ int execute_command(t_shell *shell, t_ast_node *node)
 	}
     return (-1);
 }
+
 
 char    *get_full_command_path(char *cmd, t_env *env_lst)
 {
