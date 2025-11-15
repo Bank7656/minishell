@@ -6,11 +6,31 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 13:28:51 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 14:19:53 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/15 20:06:32 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int is_builtin(char *cmd)
+{
+    if (ft_strncmp(cmd, "echo", -1) == 0)
+        return (1);
+    else if (ft_strncmp(cmd, "cd", -1) == 0)
+        return (1);
+    else if (ft_strncmp(cmd, "pwd", -1) == 0)
+        return (1);
+    else if (ft_strncmp(cmd, "export", -1) == 0)
+        return (1);
+    else if (ft_strncmp(cmd, "unset", -1) == 0)
+        return (1);
+    else if (ft_strncmp(cmd, "env", -1) == 0)
+        return (1);
+    else if (ft_strncmp(cmd, "exit", -1) == 0)
+        return (1);
+    else
+        return (0);
+}
 
 int execute_command(t_shell *shell, t_ast_node *node)
 {
@@ -20,6 +40,8 @@ int execute_command(t_shell *shell, t_ast_node *node)
     int     status;
 	int		exit_status;
 
+    if (is_builtin(node -> args[0]))
+        return (execute_builtin(shell, node));
 	pid = fork();
 	if (pid == -1)
 	{
@@ -32,7 +54,7 @@ int execute_command(t_shell *shell, t_ast_node *node)
         if (full_path_cmd == NULL)
             exit(127);
         
-        envp = convert_env_to_array(shell -> env_lst);
+        envp = convert_env_to_array(shell -> env_lst, ENV);
         if (envp == NULL)
         {
             free(full_path_cmd);

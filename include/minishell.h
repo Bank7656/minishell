@@ -6,13 +6,16 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 14:14:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 18:08:35 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/15 21:18:48 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+
+# define ENV 0
+# define EXPORT 1
 # define STDIN_FILENO 0
 # define STDOUT_FILENO 1
 # define STDERR_FILENO 2
@@ -86,6 +89,7 @@ typedef struct s_shell
 	t_token     *token_head;
 	t_env       *env_lst;
 	t_ast_node  *ast_root;
+    int         last_exit_status;
 }   t_shell;
 
 
@@ -96,9 +100,11 @@ t_ast_node      *parse_logical(t_token **tokens);
 
 t_env			*init_env(char **envp);
 char			*get_env_value(t_env *env_lst, char *key);
-char			**convert_env_to_array(t_env *env_lst);
+char            **convert_env_to_array(t_env *env_lst, int mode);
 void			free_env_list(t_env *env_list);
 int				env_lstsize(t_env *env_lst);
+t_env *create_env_node(char **splitted);
+void    add_env_to_list(t_env **head, t_env *env_node);
 
 void			free_redir_list(t_redir *redir_list);
 void			free_ast_tree(t_ast_node *node);
@@ -115,6 +121,20 @@ int				execute_pipeline(t_shell *shell, t_ast_node *node);
 int				execute_and(t_shell *shell, t_ast_node *node);
 int				execute_or(t_shell *shell, t_ast_node *node);
 int				execute_subshell(t_shell *shell, t_ast_node *node);
+
+
+int             execute_builtin(t_shell *shell, t_ast_node *node);
+int             execute_pwd(t_shell *shell, t_ast_node *node);
+int execute_cd(t_shell *shell, t_ast_node *node);
+int execute_echo(t_shell *shell, t_ast_node *node);
+int execute_exit(t_shell *shell, t_ast_node *node);
+int execute_env(t_shell *shell, t_ast_node *node);
+int execute_export(t_shell *shell, t_ast_node *node);
+int execute_unset(t_shell *shell, t_ast_node *node);
+
+int	check_var_name(char *str);
+void    print_env_lst(t_env *env_lst);
+void    print_env_array(char **arr);
 
 
 void            free_inloop(t_shell *shell);

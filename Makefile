@@ -31,6 +31,14 @@ SRC = main.c \
 	execute_pipeline.c \
 	execute_logical.c \
 	execute_subshell.c \
+	execute_builtin.c \
+	execute_pwd.c \
+	execute_cd.c \
+	execute_echo.c \
+	execute_exit.c \
+	execute_env.c \
+	execute_export.c \
+	execute_unset.c \
 	debug.c \
 	clear.c
 

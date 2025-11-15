@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 09:34:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 15:09:19 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/15 20:09:34 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char *get_env_value(t_env *env_lst, char *key)
 }
 
 
-char	**convert_env_to_array(t_env *env_lst)
+char	**convert_env_to_array(t_env *env_lst, int mode)
 {
 	int		i;
 	int		len;
@@ -45,21 +45,34 @@ char	**convert_env_to_array(t_env *env_lst)
 	trav = env_lst;
 	while (trav != NULL)
 	{
-		temp_str = ft_strjoin(trav -> name, "=");
-		if (temp_str == NULL)
-		{
-			free_args_array(args);
-			return (NULL);
-		}
-		args[i] = ft_strjoin(temp_str, trav -> value);
-		free(temp_str);
-		if (args[i] == NULL)
-		{
-			free_args_array(args);
-			return (NULL);
-		}
-		trav = trav -> next;
-		i++;
+        if (trav -> value == NULL && mode == EXPORT)
+        {
+			args[i] = ft_strdup(trav->name);
+			if (args[i] == NULL)
+            {
+                free_args_array(args);
+                return (NULL);
+            }
+            i++;
+        }
+        else if (trav -> value != NULL)
+        {
+            temp_str = ft_strjoin(trav -> name, "=");
+            if (temp_str == NULL)
+            {
+                free_args_array(args);
+                return (NULL);
+            }
+            args[i] = ft_strjoin(temp_str, trav -> value);
+            free(temp_str);
+            if (args[i] == NULL)
+            {
+                free_args_array(args);
+                return (NULL);
+            }  
+            i++;
+        }
+        trav = trav -> next;
 	}
 	args[i] = NULL;
 	return (args);

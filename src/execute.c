@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 02:06:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 15:31:53 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/13 08:38:45 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,11 @@ int execute_ast(t_shell *shell, t_ast_node *node)
         exit_code = execute_or(shell, node);
     else if (node -> type == NODE_SUBSHELL)
         exit_code = execute_subshell(shell, node);
+    else
+    {
+        ft_putendl_fd("minishell: internal error: unknown node type", 2);
+        exit_code = 1;
+    }
+    shell -> last_exit_status = exit_code;
     return (exit_code);
 }

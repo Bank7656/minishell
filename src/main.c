@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:22:55 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/13 05:01:36 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/13 12:22:25 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int main(int argc, char **argv, char **envp)
         execute_ast(shell, shell -> ast_root);
         free_inloop(shell); 
     }
-    printf("exit\n");
+    ft_putstr_fd("exit\n", 1);
     free_and_exit(shell, 0);
     return (0);
 }
