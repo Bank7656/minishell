@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 14:14:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/16 01:52:50 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/16 13:37:17 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define STDERR_FILENO 2
 
 # include <fcntl.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
@@ -141,6 +142,10 @@ void    print_env_array(char **arr);
 
 void            free_inloop(t_shell *shell);
 void            free_and_exit(t_shell *shell, int exit_code);
+
+
+void    handle_sigint(int sig_num);
+
 
 //debug
 void	print_ast(t_ast_node *node);

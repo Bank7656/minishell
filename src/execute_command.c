@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 13:28:51 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/16 02:29:01 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/16 14:28:00 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,21 @@ int execute_command(t_shell *shell, t_ast_node *node)
     int     status;
 	int		exit_status;
 
+    struct sigaction    sa_ignore;
+    struct sigaction    sa_prompt;
+    struct sigaction    sa_default;
+    
+    sa_ignore.sa_handler = SIG_IGN;
+    sa_prompt.sa_handler = &handle_sigint;
+    sa_default.sa_handler = SIG_DFL;
+    sigemptyset(&sa_ignore.sa_mask);
+    sigemptyset(&sa_prompt.sa_mask);
+    sigemptyset(&sa_default.sa_mask);
+    sa_ignore.sa_flags = 0;
+    sa_prompt.sa_flags = 0;
+    sa_default.sa_flags = 0;
+
+    sigaction(SIGINT, &sa_ignore, NULL);
     if (node -> args[0] == NULL)
         return (execute_empty_command(shell, node));
     if (is_builtin(node -> args[0]))
@@ -81,6 +96,8 @@ int execute_command(t_shell *shell, t_ast_node *node)
 	}
 	else if (pid == 0)
 	{
+        sigaction(SIGINT, &sa_default, NULL);
+        sigaction(SIGQUIT, &sa_default, NULL);
         if (handle_redirections(node -> redir) == -1)
         {
             exit(1);
@@ -111,10 +128,14 @@ int execute_command(t_shell *shell, t_ast_node *node)
 	else
 	{
         waitpid(pid, &status, 0);
+        sigaction(SIGINT, &sa_prompt, NULL);
 		if (WIFEXITED(status))
-			exit_status = WEXITSTATUS(status);
+            exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
+        {
+            write(1, "\n", 1);
 			exit_status = 128 + WTERMSIG(status);
+        }
 		else
 			exit_status = 1;
 		return (exit_status);

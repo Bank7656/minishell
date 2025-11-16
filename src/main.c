@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:22:55 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/13 12:22:25 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/16 13:46:18 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,26 @@ int main(int argc, char **argv, char **envp)
 {
     t_token     *token;
     t_shell     *shell;
+    struct sigaction    sa_prompt;
+    struct sigaction    sa_ignore;
 
     (void) argc;
     (void) argv;
+
+    sa_prompt.sa_handler = &handle_sigint;
+    sigemptyset(&sa_prompt.sa_mask);
+    sa_prompt.sa_flags = 0;
+    sigaction(SIGINT, &sa_prompt, NULL);
+
+    sa_ignore.sa_handler = SIG_IGN;
+    sigemptyset(&sa_ignore.sa_mask);
+    sa_ignore.sa_flags = 0;
+    sigaction(SIGQUIT, &sa_ignore, NULL);
+
     shell = init_shell(envp);
     while (true)
     {
-        shell -> line = readline("> ");
+        shell -> line = readline("minishell > ");
         if (shell -> line == NULL)
             break;
         if (shell -> line[0] != '\0')

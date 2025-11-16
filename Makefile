@@ -40,6 +40,7 @@ SRC = main.c \
 	execute_env.c \
 	execute_export.c \
 	execute_unset.c \
+	signal_handler.c \
 	debug.c \
 	clear.c
 
