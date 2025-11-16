@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 13:28:51 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/16 14:28:00 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/17 02:05:01 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,12 +165,12 @@ char    *get_full_command_path(char *cmd, t_env *env_lst)
         full_cmd_path = check_each_path(cmd, env_paths[i]);
         if (full_cmd_path != NULL)
         {
-            free(env_paths);
+            free_args_array(env_paths);
             return (full_cmd_path);
         }
         i++;
     }
-    free(env_paths);
+    free_args_array(env_paths);
     return (NULL);
 }
 
@@ -183,11 +183,9 @@ char    *check_each_path(char *cmd, char *path)
     if (temp_path == NULL)
         return (NULL);
     full_path = ft_strjoin(temp_path, cmd);
+    free(temp_path);
     if (full_path == NULL)
-    {
-        free(temp_path);
         return (NULL);
-    }
     if (access(full_path, X_OK | F_OK) == 0)
         return (full_path);
     free(full_path);

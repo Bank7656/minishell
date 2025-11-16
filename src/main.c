@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:22:55 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/16 13:46:18 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/17 01:54:15 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int main(int argc, char **argv, char **envp)
             continue;
         }
         print_token(shell -> token_head);
-        shell -> ast_root = parse_logical(&token);
+        shell -> ast_root = parse_logical(shell, &token);
         if (shell -> ast_root == NULL)
         {
             free_inloop(shell);

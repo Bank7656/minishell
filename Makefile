@@ -21,9 +21,11 @@ SRC = main.c \
 	lexer_utils_char.c \
 	lexer_utils_list.c \
 	parse_command.c \
+	parse_redirections.c \
 	parse_pipe.c \
 	parse_logical.c \
 	parse_subshell.c \
+	expansion.c \
 	envp.c \
 	envp_utils.c \
 	execute.c \

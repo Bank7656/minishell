@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 18:45:06 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/16 02:01:54 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/17 00:26:59 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,11 @@
 
 void    free_redir_list(t_redir *redir_list);
 char    **convert_args_to_array(t_list *arg_list);
-int     parse_redirection(t_token **tokens, t_redir **redir_list);
-int    parse_heredoc(char *delimeter);
-static void	parser_print_error(t_token *token);
-int     parse_word(t_token **tokens, t_list **arg_list);
 int     is_redirection(e_token_type type);
 static int is_command_end(t_token *token);
 t_ast_node *create_ast_node(t_list *arg_list, t_redir *redir_list);
-void	add_redir_back(t_redir **lst, t_redir *new);
 
-t_ast_node    *parse_command(t_token **tokens)
+t_ast_node    *parse_command(t_shell *shell, t_token **tokens)
 {
 	t_list		*arg_list;
 	t_redir		*redir_list;
@@ -35,7 +30,7 @@ t_ast_node    *parse_command(t_token **tokens)
 	{
 		if ((*tokens) -> type == WORD)
 		{
-			if (parse_word(tokens, &arg_list) == 0)
+			if (parse_word(shell, tokens, &arg_list) == 0)
 			{
 				free_redir_list(redir_list);
 				ft_lstclear(&arg_list, free);
@@ -83,22 +78,34 @@ t_ast_node *create_ast_node(t_list *arg_list, t_redir *redir_list)
 	return (cmd_node);
 }
 
-int     parse_word(t_token **tokens, t_list **arg_list)
+int     parse_word(t_shell *shell, t_token **tokens, t_list **arg_list)
 {
 	t_list	*node;
-	char    *word;
+    char    *raw_word;
+	char    *expanded_word;
 
-	word = ft_strdup((*tokens) -> value);
-	if (word == NULL)
+    raw_word = (*tokens) -> value;
+	expanded_word = expanded_string(shell, raw_word);
+	if (expanded_word == NULL)
 		return (0); 
-	node = ft_lstnew(word);
+	node = ft_lstnew(expanded_word);
 	if (node == NULL)
 	{
-		free(word);
+		free(expanded_word);
 		return (0);
 	}
 	ft_lstadd_back(arg_list, node);
 	return (1);
+}
+
+
+
+int     is_redirection(e_token_type type)
+{
+	if (type == REDIR_IN || type == REDIR_OUT || type == APPEND || type == HEREDOC)
+		return (1);
+	else
+		return (0);
 }
 
 void    free_redir_list(t_redir *redir_list)
@@ -142,105 +149,6 @@ char    **convert_args_to_array(t_list *arg_list)
 	args[i] = NULL;
 	ft_lstclear(&arg_list, free);
 	return (args);
-}
-
-int     parse_redirection(t_token **tokens, t_redir **redir_list)
-{
-    int     heredoc_fd;
-	t_redir *redir_node;
-
-	if ((*tokens) -> next == NULL || (*tokens) -> next -> type != WORD)
-    {
-        parser_print_error((*tokens) -> next);
-		return (0);
-    }
-	redir_node  = malloc(sizeof(t_redir));
-	if (redir_node == NULL)
-		return (0);
-	redir_node -> type = (*tokens) -> type;
-	redir_node -> next = NULL;
-    if ((*tokens) -> type == HEREDOC)
-    {
-        heredoc_fd = parse_heredoc((*tokens) -> next -> value); 
-        if (heredoc_fd == -1)
-        {
-            free(redir_node);
-            return (0);
-        }
-        redir_node -> value = ft_itoa(heredoc_fd);
-    }
-    else
-	    redir_node -> value = ft_strdup((*tokens) -> next -> value);
-	if (redir_node -> value == NULL)
-	{
-		free(redir_node);
-		return (0);
-	}
-	add_redir_back(redir_list, redir_node);
-	return (1);
-}
-
-int    parse_heredoc(char *delimeter)
-{
-    int     pipe_fd[2];
-    char    *line;
-
-    if (pipe(pipe_fd) == -1)
-    {
-        perror("pipe");
-        return (-1);
-    }
-    while (true)
-    {
-        line = readline("> ");
-        if (line == NULL || ft_strncmp(line, delimeter, -1) == 0)
-        {
-            free(line);
-            break ;   
-        }
-        ft_putendl_fd(line, pipe_fd[1]);
-        free(line);
-    }
-    close(pipe_fd[1]);
-    return (pipe_fd[0]);
-}
-
-static void	parser_print_error(t_token *token)
-{
-	ft_putstr_fd("minishell: syntax error near unexpected token '", 2);
-	if (token == NULL)
-		ft_putstr_fd("newline", 2);
-	else
-		ft_putstr_fd(token->value, 2);
-	ft_putendl_fd("'", 2);
-}
-
-int     is_redirection(e_token_type type)
-{
-	if (type == REDIR_IN || type == REDIR_OUT || type == APPEND || type == HEREDOC)
-		return (1);
-	else
-		return (0);
-}
-
-void	add_redir_back(t_redir **lst, t_redir *new)
-{
-	t_redir	*ptr;
-
-	if (new == NULL)
-		return ;
-	if (*lst == NULL)
-	{
-		*lst = new;
-		return ;
-	}
-	ptr = *lst;
-	while (ptr -> next != NULL)
-	{
-		ptr = ptr -> next;
-	}
-	ptr -> next = new;
-	return ;
 }
 
 static int is_command_end(t_token *token)

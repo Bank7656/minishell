@@ -6,20 +6,20 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 02:15:17 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/13 05:07:27 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/17 00:26:32 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_ast_node  *parse_logical(t_token **tokens)
+t_ast_node  *parse_logical(t_shell *shell, t_token **tokens)
 {
     e_token_type    logical;
     t_ast_node      *left_node;
     t_ast_node      *logic_node;
     t_ast_node      *right_node;
 
-    left_node = parse_pipe(tokens);
+    left_node = parse_pipe(shell, tokens);
     if (left_node == NULL)
         return (NULL);
     while (*tokens != NULL && ((*tokens) -> type == AND || (*tokens) -> type == OR))
@@ -32,7 +32,7 @@ t_ast_node  *parse_logical(t_token **tokens)
             free_ast_tree(left_node);
             return (NULL);
         }
-        right_node = parse_pipe(tokens);
+        right_node = parse_pipe(shell, tokens);
         if (right_node == NULL)
         {
             free_ast_tree(left_node);
