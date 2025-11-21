@@ -26,6 +26,7 @@ SRC = main.c \
 	parse_logical.c \
 	parse_subshell.c \
 	expansion.c \
+	wildcard.c \
 	envp.c \
 	envp_utils.c \
 	execute.c \

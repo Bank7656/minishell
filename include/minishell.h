@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 14:14:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/17 02:07:14 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/20 10:46:58 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define STDOUT_FILENO 1
 # define STDERR_FILENO 2
 
+# include <dirent.h>
 # include <fcntl.h>
 # include <signal.h>
 # include <stdio.h>
@@ -149,6 +150,8 @@ void            free_and_exit(t_shell *shell, int exit_code);
 
 
 void			handle_sigint(int sig_num);
+
+t_list			*wildcard(t_shell *shell, char *pattern);
 
 
 //debug

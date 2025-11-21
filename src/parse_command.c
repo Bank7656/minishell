@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 18:45:06 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/17 00:26:59 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/20 10:46:23 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,21 +80,33 @@ t_ast_node *create_ast_node(t_list *arg_list, t_redir *redir_list)
 
 int     parse_word(t_shell *shell, t_token **tokens, t_list **arg_list)
 {
-	t_list	*node;
+	t_list	*globbed_lst;
     char    *raw_word;
 	char    *expanded_word;
+	int		is_quoted;
 
     raw_word = (*tokens) -> value;
+	if (ft_strchr(raw_word, '\'') || ft_strchr(raw_word, '\"'))
+		is_quoted = 1;
+	else
+		is_quoted = 0;
 	expanded_word = expanded_string(shell, raw_word);
 	if (expanded_word == NULL)
 		return (0); 
-	node = ft_lstnew(expanded_word);
-	if (node == NULL)
+	if (ft_strchr(expanded_word, '*') && !is_quoted)
 	{
-		free(expanded_word);
-		return (0);
+		globbed_lst = wildcard(shell, expanded_word);
+		if (globbed_lst != NULL)
+		{
+			free(expanded_word);
+			ft_lstadd_back(arg_list, globbed_lst);
+		}			
+		else
+			ft_lstadd_back(arg_list, ft_lstnew(expanded_word));
+
 	}
-	ft_lstadd_back(arg_list, node);
+	else
+		ft_lstadd_back(arg_list, ft_lstnew(expanded_word));
 	return (1);
 }
 
