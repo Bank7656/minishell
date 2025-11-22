@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 02:43:23 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 16:47:16 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:41:20 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	free_token_list(t_token *head)
 	t_token	*trav;
 
 	trav = head;
-	while (head != NULL)
+	while (trav != NULL)
 	{
 		head = head -> next;
 		free(trav -> value);
