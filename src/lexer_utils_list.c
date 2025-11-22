@@ -6,37 +6,45 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 02:43:23 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 13:48:46 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 16:47:16 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-t_token	*create_token(t_shell *shell, e_token_type token_type, char *value)
+static t_token	*create_token(t_shell *shell, e_token_type type, char *val);
+static void		add_token_to_lst(t_token **head, t_token *token);
+
+int	append_token(t_shell *shell, t_token **head, e_token_type type, char *val)
+{
+	t_token	*new_token;
+
+	new_token = create_token(shell, type, val);
+	if (new_token == NULL)
+		return (-1);
+	add_token_to_lst(head, new_token);
+	return (0);
+}
+
+static t_token	*create_token(t_shell *shell, e_token_type type, char *val)
 {
 	t_token	*token;
 
 	token = (t_token *)malloc(sizeof(t_token));
 	if (token == NULL)
-	{
-		perror("malloc");
-		free_and_exit(shell, 1);
 		return (NULL);
-	}
-	token -> type = token_type;
-	token -> value = ft_strdup(value);
+	token -> type = type;
+	token -> value = ft_strdup(val);
 	token -> next = NULL;
-	if (token -> value == NULL && value != NULL)
+	if (token -> value == NULL && val != NULL)
 	{
 		free(token);
-		perror("malloc");
-		free_and_exit(shell, 1);
 		return (NULL);
 	}
 	return (token);
 }
 
-void	add_token_to_lst(t_token **head, t_token *token)
+static void	add_token_to_lst(t_token **head, t_token *token)
 {
 	t_token *trav;
 	

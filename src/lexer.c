@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:57:20 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/21 23:56:21 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 16:45:51 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,10 @@ int	handle_word(t_shell *shell, t_token **head, char *line, int i)
 	}
 	word = ft_substr(&line[start_index], 0, i - start_index);
 	if (word == NULL)
-	{
-		perror("malloc");
-		free_and_exit(shell, 1);
 		return (0);
-	}
-	add_token_to_lst(head, create_token(shell, WORD, word)); 
+	// add_token_to_lst(head, create_token(shell, WORD, word)); 
+	if (append_token(shell, head, WORD, word) == -1)
+		return (-1);
 	free(word);
 	return (i - start_index);
 }

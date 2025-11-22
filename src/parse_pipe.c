@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 01:12:09 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 01:28:46 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 15:16:32 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ t_ast_node  *parse_pipe(t_shell *shell, t_token **tokens)
 		if (*tokens == NULL || (*tokens) -> type == PIPE)
 		{
 			ft_putendl_fd("minishell: syntax error near unexpected token '|'", 2);
+			shell -> last_exit_status = 2;
 			free_ast_tree(left_node);
-			// Need to exit status 2
 			return (NULL);
 		}
 		right_node = parse_subshell(shell, tokens);

@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 02:52:06 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 13:49:43 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:16:27 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ int	handle_pipe_token(t_shell *shell, t_token **head, char *line, int i)
 {
 	if (line[i + 1] == '|' && line[i + 1] != '\0')
 	{
-		add_token_to_lst(head, create_token(shell, OR, "||"));
+		if (append_token(shell, head, OR, "||") == -1)
+			return (-1);
 		return (2);
 	}
 	else
 	{
-		add_token_to_lst(head, create_token(shell, PIPE, "|"));
+		if (append_token(shell, head, PIPE, "|") == -1)
+			return (-1);
 		return (1);
 	}
 }
@@ -32,23 +34,27 @@ int	handle_redir_token(t_shell *shell, t_token **head, char *line, int i)
 	{
 		if (line[i + 1] == '<' && line[i + 1] != '\0')
 		{
-			add_token_to_lst(head, create_token(shell, HEREDOC, "<<"));
+			if (append_token(shell, head, HEREDOC, "<<") == -1)
+				return (-1);
 			return (2);
 		}
 		else
 		{
-			add_token_to_lst(head, create_token(shell, REDIR_IN, "<"));
+			if (append_token(shell, head, REDIR_IN, "<") == -1)
+				return (-1);
 			return (1);
 		}
 	}
 	if (line[i + 1] == '>' && line[i + 1] != '\0')
 	{
-		add_token_to_lst(head, create_token(shell, APPEND, ">>"));
+		if (append_token(shell, head, APPEND, ">>") == -1)
+			return (-1);
 		return (2);
 	}
 	else
 	{
-		add_token_to_lst(head, create_token(shell, REDIR_OUT, ">"));
+		if (append_token(shell, head, REDIR_OUT, ">") == -1)
+			return (-1);
 		return (1);
 	}
 }
@@ -57,7 +63,8 @@ int	handle_and_token(t_shell *shell, t_token **head, char *line, int i)
 {
 	if (line[i + 1] == '&' && line[i + 1] != '\0')
 	{
-		add_token_to_lst(head, create_token(shell, AND, "&&"));
+		if (append_token(shell, head, AND, "&&") == -1)
+			return (-1);
 		return (2);
 	} 
 	else
@@ -70,13 +77,15 @@ int	handle_paren_token(t_shell *shell, t_token **head, char *line, int i)
 {
 	if (line[i] == '(')
 	{
-		add_token_to_lst(head, create_token(shell, LPAREN, "(")); 
+		if (append_token(shell, head, LPAREN, "(") == -1)
+			return (-1);
 		return (1);
 	}
 	else if (line[i] == ')')
 	{
-		add_token_to_lst(head, create_token(shell, RPAREN, ")")); 
+		if (append_token(shell, head, RPAREN, ")") == -1)
+			return (-1);
 		return (1);
-	}  
+	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 08:41:43 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/21 23:26:47 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:09:31 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int	execute_cd(t_shell *shell, t_ast_node *node)
 	}
 	if (chdir(path) == -1)  
 	{
-	  perror("minishell: cd");
-	  return (1);
+		perror("minishell: cd");
+		return (1);
 	}
 	return (0);
 }

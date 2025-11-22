@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 03:07:10 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/21 23:26:15 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 17:09:15 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_env	*init_env(char **envp)
 
 t_env	*create_env_node(char **splitted)
 {
-	t_env *env_node;
+	t_env	*env_node;
 
 	env_node = (t_env *)malloc(sizeof(t_env));
 	if (env_node == NULL)
@@ -64,12 +64,12 @@ t_env	*create_env_node(char **splitted)
 	return (env_node);
 }
 
-void    add_env_to_list(t_env **head, t_env *env_node)
+void	add_env_to_list(t_env **head, t_env *env_node)
 {
 	t_env *trav;
 	
 	if (*head == NULL)
-	{   
+	{
 		*head = env_node;
 	}
 	else
