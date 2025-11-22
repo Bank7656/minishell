@@ -16,15 +16,18 @@ HEADER = minishell.h \
 LIBFT_NAME = libft.a
 
 SRC = main.c \
+	shell_init.c \
 	lexer.c \
 	lexer_handler.c \
 	lexer_utils_char.c \
 	lexer_utils_list.c \
+	parse_word.c \
 	parse_command.c \
 	parse_redirections.c \
 	parse_pipe.c \
 	parse_logical.c \
 	parse_subshell.c \
+	parse_utils.c \
 	expansion.c \
 	wildcard.c \
 	envp.c \

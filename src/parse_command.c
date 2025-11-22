@@ -6,19 +6,16 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 18:45:06 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/20 10:46:23 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 01:47:02 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    free_redir_list(t_redir *redir_list);
-char    **convert_args_to_array(t_list *arg_list);
-int     is_redirection(e_token_type type);
-static int is_command_end(t_token *token);
-t_ast_node *create_ast_node(t_list *arg_list, t_redir *redir_list);
+char		**convert_args_to_array(t_list *arg_list);
+t_ast_node	*create_ast_node(t_list *arg_list, t_redir *redir_list);
 
-t_ast_node    *parse_command(t_shell *shell, t_token **tokens)
+t_ast_node	*parse_command(t_shell *shell, t_token **tokens)
 {
 	t_list		*arg_list;
 	t_redir		*redir_list;
@@ -47,18 +44,18 @@ t_ast_node    *parse_command(t_shell *shell, t_token **tokens)
 				return (NULL);
 			}
 			(*tokens) = (*tokens) -> next -> next;
-	   }
+		}
 	}
 	cmd_node = create_ast_node(arg_list, redir_list); 
-    if (cmd_node == NULL)
-    {
-        free_redir_list(redir_list);
-        ft_lstclear(&arg_list, free); 
-    }
+	if (cmd_node == NULL)
+	{
+		free_redir_list(redir_list);
+		ft_lstclear(&arg_list, free); 
+	}
 	return (cmd_node);
 }
 
-t_ast_node *create_ast_node(t_list *arg_list, t_redir *redir_list)
+t_ast_node	*create_ast_node(t_list *arg_list, t_redir *redir_list)
 {
 	t_ast_node *cmd_node;
 
@@ -67,79 +64,23 @@ t_ast_node *create_ast_node(t_list *arg_list, t_redir *redir_list)
 		return (NULL);
 	cmd_node -> type = NODE_COMMAND;
 	cmd_node -> args = convert_args_to_array(arg_list);
-    if (cmd_node -> args == NULL)
-    {
-        free(cmd_node);
-        return (NULL);
-    }
+	if (cmd_node -> args == NULL)
+	{
+		free(cmd_node);
+		return (NULL);
+	}
 	cmd_node -> redir = redir_list;
 	cmd_node -> left = NULL;
 	cmd_node -> right = NULL;
 	return (cmd_node);
 }
 
-int     parse_word(t_shell *shell, t_token **tokens, t_list **arg_list)
+char	**convert_args_to_array(t_list *arg_list)
 {
-	t_list	*globbed_lst;
-    char    *raw_word;
-	char    *expanded_word;
-	int		is_quoted;
-
-    raw_word = (*tokens) -> value;
-	if (ft_strchr(raw_word, '\'') || ft_strchr(raw_word, '\"'))
-		is_quoted = 1;
-	else
-		is_quoted = 0;
-	expanded_word = expanded_string(shell, raw_word);
-	if (expanded_word == NULL)
-		return (0); 
-	if (ft_strchr(expanded_word, '*') && !is_quoted)
-	{
-		globbed_lst = wildcard(shell, expanded_word);
-		if (globbed_lst != NULL)
-		{
-			free(expanded_word);
-			ft_lstadd_back(arg_list, globbed_lst);
-		}			
-		else
-			ft_lstadd_back(arg_list, ft_lstnew(expanded_word));
-
-	}
-	else
-		ft_lstadd_back(arg_list, ft_lstnew(expanded_word));
-	return (1);
-}
-
-
-
-int     is_redirection(e_token_type type)
-{
-	if (type == REDIR_IN || type == REDIR_OUT || type == APPEND || type == HEREDOC)
-		return (1);
-	else
-		return (0);
-}
-
-void    free_redir_list(t_redir *redir_list)
-{
-    t_redir *trav;
-
-    trav = redir_list;
-    while (redir_list != NULL)
-    {
-        redir_list = redir_list -> next;
-        free(trav -> value);
-        free(trav);
-        trav = redir_list;
-    }
-}
-
-char    **convert_args_to_array(t_list *arg_list)
-{
-	int     i;
-	int     len;
-	char    **args;
-	t_list  *trav_node;
+	int		i;
+	int		len;
+	char	**args;
+	t_list	*trav_node;
 
 	i = 0;
 	len = ft_lstsize(arg_list);
@@ -150,31 +91,15 @@ char    **convert_args_to_array(t_list *arg_list)
 	while (trav_node != NULL)
 	{
 		args[i] = ft_strdup((char *)(trav_node -> content));
-        if (args[i] == NULL)
-        {
-            free_args_array(args);
-            return (NULL);
-        }
+		if (args[i] == NULL)
+		{
+			free_args_array(args);
+			return (NULL);
+		}
 		trav_node = trav_node -> next;
 		i++;
 	}
 	args[i] = NULL;
 	ft_lstclear(&arg_list, free);
 	return (args);
-}
-
-static int is_command_end(t_token *token)
-{
-	if (token == NULL)
-		return (1);
-	else if (token -> type == PIPE)
-		return (1);
-	else if (token -> type == RPAREN)
-		return (1);
-	else if (token -> type == AND)
-		return (1);
-	else if (token -> type == OR)
-		return (1);
-	else
-		return (0);
 }

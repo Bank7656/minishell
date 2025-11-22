@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 15:30:20 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/15 20:06:16 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 13:51:01 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,12 @@ void	set_env_value(t_env **env_lst, char *name, char *value)
 	}
 	new_node = (t_env *)malloc(sizeof(t_env));
 	if (!new_node)
-    {
-        free(name);
-        free(value);
-        perror("malloc");
-        return ;
-    }
+	{
+		free(name);
+		free(value);
+		perror("malloc");
+		return ;
+	}
 	new_node->name = name;
 	new_node->value = value;
 	new_node->next = NULL;

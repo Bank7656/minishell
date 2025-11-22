@@ -6,14 +6,14 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 20:25:36 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/21 15:04:02 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 13:35:39 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static bool	globbing(t_list **lst, char *d_name);
-bool		is_matching_wildcard(char *pattern, char *filename);
+static bool	is_matching_wildcard(char *pattern, char *filename);
 
 t_list	*wildcard(t_shell *shell, char *pattern)
 {
@@ -64,7 +64,7 @@ static bool	globbing(t_list **lst, char *d_name)
 	return (true);
 }
 
-bool	is_matching_wildcard(char *pattern, char *filename)
+static bool	is_matching_wildcard(char *pattern, char *filename)
 {
 	if (*pattern == '\0')
 		return (*filename == '\0');

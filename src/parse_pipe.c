@@ -6,44 +6,62 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 01:12:09 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/17 00:23:14 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 01:28:46 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right);
+
 t_ast_node  *parse_pipe(t_shell *shell, t_token **tokens)
 {
-    t_ast_node  *left_node;
-    t_ast_node  *pipe_node;
-    t_ast_node  *right_node;
+	t_ast_node  *left_node;
+	t_ast_node  *pipe_node;
+	t_ast_node  *right_node;
 
-    left_node = parse_subshell(shell, tokens);
-    if (left_node == NULL)
-        return (NULL);
-    while (*tokens != NULL && (*tokens) -> type == PIPE)
-    {
-        (*tokens) = (*tokens) -> next;
-        right_node = parse_subshell(shell, tokens);
-        if (right_node == NULL)
-        {
-            ft_putendl_fd("minishell: syntax error near unexpected token 'newline'", 2);
-            free_ast_tree(left_node);
-            return (NULL);
-        }
-        pipe_node = (t_ast_node *)malloc(sizeof(t_ast_node));
-        if (pipe_node == NULL)
-        {
-            free_ast_tree(left_node);
-            free_ast_tree(right_node);
-            return (NULL);
-        }
-        pipe_node -> left = left_node;
-        pipe_node -> right = right_node;
-        pipe_node -> type = NODE_PIPE;
-        pipe_node -> redir = NULL;
-        pipe_node -> args = NULL;
-        left_node = pipe_node;
-    }
-    return (left_node);
+	left_node = parse_subshell(shell, tokens);
+	if (left_node == NULL)
+		return (NULL);
+	while (*tokens != NULL && (*tokens) -> type == PIPE)
+	{
+		(*tokens) = (*tokens) -> next;
+		if (*tokens == NULL || (*tokens) -> type == PIPE)
+		{
+			ft_putendl_fd("minishell: syntax error near unexpected token '|'", 2);
+			free_ast_tree(left_node);
+			// Need to exit status 2
+			return (NULL);
+		}
+		right_node = parse_subshell(shell, tokens);
+		if (right_node == NULL)
+		{
+			free_ast_tree(left_node);
+			return (NULL);
+		}
+		pipe_node = create_pipe_node(left_node, right_node);
+		if (pipe_node == NULL)
+		{
+			free_ast_tree(left_node);
+			free_ast_tree(right_node);
+			return (NULL);
+		}
+		pipe_node -> type = NODE_PIPE;
+		left_node = pipe_node;
+	}
+	return (left_node);
+}
+
+static t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
+{
+	t_ast_node	*pipe_node;
+
+	pipe_node = (t_ast_node *)malloc(sizeof(t_ast_node));
+	if (pipe_node == NULL)
+		return (NULL);
+	pipe_node -> left = left;
+	pipe_node -> right = right;
+	pipe_node -> args = NULL;
+	pipe_node -> redir = NULL;
+	return (pipe_node);
 }

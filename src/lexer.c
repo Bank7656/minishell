@@ -6,26 +6,24 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:57:20 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/13 04:42:03 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/21 23:56:21 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-t_token  *lexer(t_shell *shell, char *line)
+t_token	*lexer(t_shell *shell, char *line)
 {
-	int         i;
-	t_token     *head;
-	int         len;
+	int		i;
+	int		len;
+	t_token	*head;
 
 	i = 0;
 	head = NULL;
 	while (line[i] != '\0')
 	{
 		while (ft_isspace(line[i]))
-		{
 			i++;
-		}
 		if (line[i] == '\0')
 			break;
 		len = handle_metacharacter(shell, &head, line, i);
@@ -37,11 +35,10 @@ t_token  *lexer(t_shell *shell, char *line)
 			return (lexer_error(head, "syntax error: unclosed quote"));
 		i += len;
 	}
-
 	return (head);
 }
 
-int  handle_metacharacter(t_shell *shell, t_token **head, char *line, int i)
+int	handle_metacharacter(t_shell *shell, t_token **head, char *line, int i)
 {
 	if (line[i] == '|')
 		return (handle_pipe_token(shell, head, line, i));
@@ -55,11 +52,11 @@ int  handle_metacharacter(t_shell *shell, t_token **head, char *line, int i)
 		return (0);
 }
 
-int handle_word(t_shell *shell, t_token **head, char *line, int i)
+int	handle_word(t_shell *shell, t_token **head, char *line, int i)
 {
-	int     start_index;
-	char    quote_char;
-	char    *word;
+	int		start_index;
+	char	quote_char;
+	char	*word;
 
 	start_index = i;
 	if (line[i] == '\'' || line[i] == '\"')
@@ -67,9 +64,7 @@ int handle_word(t_shell *shell, t_token **head, char *line, int i)
 		quote_char = line[i];
 		i++;
 		while(line[i] != '\0' && line[i] != quote_char)
-		{
 			i++;
-		}
 		if (line[i] == '\0')
 			return (0);
 		i++;
@@ -78,19 +73,17 @@ int handle_word(t_shell *shell, t_token **head, char *line, int i)
 	{
 		start_index = i;
 		while(line[i] != '\0' && !(ft_isspace(line[i])) && !(ft_ismetacharacter(line[i])))
-		{
 			i++;
-		}
 	}
 	word = ft_substr(&line[start_index], 0, i - start_index);
 	if (word == NULL)
 	{
-        perror("malloc");
+		perror("malloc");
 		free_and_exit(shell, 1);
 		return (0);
 	}
 	add_token_to_lst(head, create_token(shell, WORD, word)); 
-    free(word);
+	free(word);
 	return (i - start_index);
 }
 

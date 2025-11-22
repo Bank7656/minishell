@@ -6,75 +6,74 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 02:43:23 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/09 18:10:12 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 13:48:46 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-
-t_token *create_token(t_shell *shell, e_token_type token_type, char *value)
+t_token	*create_token(t_shell *shell, e_token_type token_type, char *value)
 {
-    t_token *token;
+	t_token	*token;
 
-    token = (t_token *)malloc(sizeof(t_token));
-    if (token == NULL)
-    {
-        perror("malloc");
-        free_and_exit(shell, 1);
-        return (NULL);
-    }
-    token -> type = token_type;
-    token -> value = ft_strdup(value);
-    token -> next = NULL;
-    if (token -> value == NULL && value != NULL)
-    {
-        free(token);
-        perror("malloc");
-        free_and_exit(shell, 1);
-        return (NULL);
-    }
-    return (token);
+	token = (t_token *)malloc(sizeof(t_token));
+	if (token == NULL)
+	{
+		perror("malloc");
+		free_and_exit(shell, 1);
+		return (NULL);
+	}
+	token -> type = token_type;
+	token -> value = ft_strdup(value);
+	token -> next = NULL;
+	if (token -> value == NULL && value != NULL)
+	{
+		free(token);
+		perror("malloc");
+		free_and_exit(shell, 1);
+		return (NULL);
+	}
+	return (token);
 }
 
-void    add_token_to_lst(t_token **head, t_token *token)
+void	add_token_to_lst(t_token **head, t_token *token)
 {
-    t_token *trav;
-    
-    if (*head == NULL)
-    {   
-        *head = token;
-    }
-    else
-    {
-        trav = *head;
-        while (trav -> next != NULL)
-        {
-            trav = trav -> next;
-        }
-        trav -> next = token;
-    }
+	t_token *trav;
+	
+	if (*head == NULL)
+	{
+		*head = token;
+	}
+	else
+	{
+		trav = *head;
+		while (trav -> next != NULL)
+		{
+			trav = trav -> next;
+		}
+		trav -> next = token;
+	}
 }
 
 
-void    free_token_list(t_token *head)
+void	free_token_list(t_token *head)
 {
-    t_token *trav;
+	t_token	*trav;
 
-    trav = head;
-    while (head != NULL)
-    {
-        head = head -> next;
-        free(trav -> value);
-        free(trav);
-        trav = head;
-    }
+	trav = head;
+	while (head != NULL)
+	{
+		head = head -> next;
+		free(trav -> value);
+		free(trav);
+		trav = head;
+	}
 }
 
-void    *lexer_error(t_token *head, char *err_msg)
+void	*lexer_error(t_token *head, char *err_msg)
 {
-    ft_putstr_fd("minishell: ", 2);
-    ft_putendl_fd(err_msg, 2);
-    free_token_list(head);
-    return (NULL);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putendl_fd(err_msg, 2);
+	free_token_list(head);
+	return (NULL);
 }

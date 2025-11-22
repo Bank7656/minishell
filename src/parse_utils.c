@@ -1,47 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils_char.c                                 :+:      :+:    :+:   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/05 02:42:44 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/21 23:59:30 by thacharo         ###   ########.fr       */
+/*   Created: 2025/11/21 23:19:11 by thacharo          #+#    #+#             */
+/*   Updated: 2025/11/22 13:40:58 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "minishell.h"
 
-int	ft_isspace(int c)
+int	is_command_end(t_token *token)
 {
-	if (c == ' ')
+	if (token == NULL)
 		return (1);
-	else if (c == '\f')
+	else if (token -> type == PIPE)
 		return (1);
-	else if (c == '\n')
+	else if (token -> type == RPAREN)
 		return (1);
-	else if (c == '\r')
+	else if (token -> type == AND)
 		return (1);
-	else if (c == '\t')
+	else if (token -> type == OR)
 		return (1);
-	else if (c == '\v')
-		return (1);
-	return (0);
+	else
+		return (0);
 }
 
-int	ft_ismetacharacter(int c)
+int	is_redirection(e_token_type type)
 {
-	if (c == '|')
+	if (type == REDIR_IN)
 		return (1);
-	else if (c == '<')
+	else if (type == REDIR_OUT)
 		return (1);
-	else if (c == '>')
+	else if (type == APPEND)
 		return (1);
-	else if (c == '&')
+	else if (type == HEREDOC)
 		return (1);
-	else if (c == '(')
-		return (1);
-	else if (c == ')')
-		return (1);
-	return (0);
+	else
+		return (0);
 }

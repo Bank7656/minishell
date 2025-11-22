@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 14:58:29 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/08 14:58:34 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/21 23:15:57 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,4 +139,19 @@ void	print_ast(t_ast_node *node)
 	printf("--- AST Start ---\n");
 	print_ast_recursive(node, 0);
 	printf("---- AST End ----\n");
+}
+
+void    print_token(t_token *token)
+{
+    t_token *trav;
+
+    trav = token;
+    while (trav != NULL) 
+    {
+        printf("[%s]", trav -> value);
+        if (trav -> next != NULL)
+            printf("->");
+        trav = trav -> next;
+    }
+    printf("\n");
 }

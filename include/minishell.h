@@ -6,13 +6,12 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 14:14:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/20 10:46:58 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 13:39:12 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 
 # define ENV 0
 # define EXPORT 1
@@ -44,23 +43,23 @@ typedef enum
 	OR,
 	LPAREN,
 	RPAREN
-}   e_token_type;
+}	e_token_type;
 
 typedef struct s_token
 {
-	e_token_type        type;
-	char                *value;
-	struct s_token      *next;
-}   t_token;
+	e_token_type	type;
+	char			*value;
+	struct s_token	*next;
+}	t_token;
 
 typedef enum
 {
-   NODE_COMMAND,
-   NODE_PIPE,
-   NODE_AND,
-   NODE_OR,
-   NODE_SUBSHELL 
-} e_node_type;
+	NODE_COMMAND,
+	NODE_PIPE,
+	NODE_AND,
+	NODE_OR,
+	NODE_SUBSHELL
+}	e_node_type;
 
 typedef struct s_redir
 {
@@ -84,30 +83,34 @@ typedef struct s_ast_node
 	struct s_ast_node	*right;
 	char				**args;
 	t_redir				*redir;
-} t_ast_node;
+}	t_ast_node;
 
 typedef struct s_shell
 {
-	char        *line;
-	t_token     *token_head;
-	t_env       *env_lst;
-	t_ast_node  *ast_root;
-	int         last_exit_status;
-}   t_shell;
+	char		*line;
+	t_token		*token_head;
+	t_env		*env_lst;
+	t_ast_node	*ast_root;
+	int			last_exit_status;
+}	t_shell;
 
 
-char            *expanded_string(t_shell *shell, char *word);
+extern volatile sig_atomic_t	g_signal_status;
 
-t_ast_node      *parse_command(t_shell *shell, t_token **tokens);
+t_shell			*init_shell(char **envp);
+
+char			*expanded_string(t_shell *shell, char *word);
+
+t_ast_node		*parse_command(t_shell *shell, t_token **tokens);
 int				parse_word(t_shell *shell, t_token **tokens, t_list **arg_list);
 int				parse_redirection(t_token **tokens, t_redir **redir_list);
-t_ast_node      *parse_subshell(t_shell *shell, t_token **tokens);
-t_ast_node      *parse_pipe(t_shell *shell, t_token **tokens);
-t_ast_node      *parse_logical(t_shell *shell, t_token **tokens);
+t_ast_node		*parse_subshell(t_shell *shell, t_token **tokens);
+t_ast_node		*parse_pipe(t_shell *shell, t_token **tokens);
+t_ast_node		*parse_logical(t_shell *shell, t_token **tokens);
 
 t_env			*init_env(char **envp);
 char			*get_env_value(t_env *env_lst, char *key);
-char            **convert_env_to_array(t_env *env_lst, int mode);
+char			**convert_env_to_array(t_env *env_lst, int mode);
 void			free_env_list(t_env *env_list);
 int				env_lstsize(t_env *env_lst);
 t_env			*create_env_node(char **splitted);
@@ -116,6 +119,10 @@ void			add_env_to_list(t_env **head, t_env *env_node);
 void			free_redir_list(t_redir *redir_list);
 void			free_ast_tree(t_ast_node *node);
 void			free_args_array(char **args);
+
+int				is_command_end(t_token *token);
+int				is_redirection(e_token_type type);
+
 
 
 char			*get_full_command_path(char *cmd, t_env *env_lst);
@@ -131,8 +138,8 @@ int				execute_or(t_shell *shell, t_ast_node *node);
 int				execute_subshell(t_shell *shell, t_ast_node *node);
 
 
-int             execute_builtin(t_shell *shell, t_ast_node *node);
-int             execute_pwd(t_shell *shell, t_ast_node *node);
+int				execute_builtin(t_shell *shell, t_ast_node *node);
+int				execute_pwd(t_shell *shell, t_ast_node *node);
 int				execute_cd(t_shell *shell, t_ast_node *node);
 int				execute_echo(t_shell *shell, t_ast_node *node);
 int				execute_exit(t_shell *shell, t_ast_node *node);
@@ -145,8 +152,8 @@ void			print_env_lst(t_env *env_lst);
 void			print_env_array(char **arr);
 
 
-void            free_inloop(t_shell *shell);
-void            free_and_exit(t_shell *shell, int exit_code);
+void			free_inloop(t_shell *shell);
+void			free_and_exit(t_shell *shell, int exit_code);
 
 
 void			handle_sigint(int sig_num);
@@ -156,5 +163,6 @@ t_list			*wildcard(t_shell *shell, char *pattern);
 
 //debug
 void			print_ast(t_ast_node *node);
+void			print_token(t_token *token);
 
 #endif

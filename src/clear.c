@@ -6,35 +6,49 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 01:54:43 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/08 01:12:29 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 13:36:38 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    free_ast_tree(t_ast_node *node)
+void	free_ast_tree(t_ast_node *node)
 {
-    if (node == NULL)
-        return ;
-    free_ast_tree(node -> left);
-    free_ast_tree(node -> right);
-    if (node -> type == NODE_COMMAND)
-    {
-        free_args_array(node -> args);
-        free_redir_list(node -> redir);
-    }
-    free(node);
+	if (node == NULL)
+		return ;
+	free_ast_tree(node -> left);
+	free_ast_tree(node -> right);
+	if (node -> type == NODE_COMMAND)
+	{
+		free_args_array(node -> args);
+		free_redir_list(node -> redir);
+	}
+	free(node);
 }
 
-void    free_args_array(char **args)
+void	free_args_array(char **args)
 {
-    int i;
+	int i;
 
-    i = 0;
-    while (args[i] != NULL)
-    {
-        free(args[i]);
-        i++;
-    }
-    free(args);
+	i = 0;
+	while (args[i] != NULL)
+	{
+		free(args[i]);
+		i++;
+	}
+	free(args);
+}
+
+void	free_redir_list(t_redir *redir_list)
+{
+	t_redir *trav;
+
+	trav = redir_list;
+	while (redir_list != NULL)
+	{
+		redir_list = redir_list -> next;
+		free(trav -> value);
+		free(trav);
+		trav = redir_list;
+	}
 }

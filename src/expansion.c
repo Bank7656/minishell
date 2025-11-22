@@ -15,13 +15,13 @@
 static char	*ft_str_add_char(char *str, char c);
 static char	*expand_dollar_sign(t_shell *shell, char *word, int *i);
 
-char    *expanded_string(t_shell *shell, char *word)
+char	*expanded_string(t_shell *shell, char *word)
 {
-	int     i;
-	char    quote_state;
-	char    *expanded_word;
-	char    *full_str;
-	char    *temp_str;
+	int		i;
+	char	quote_state;
+	char	*expanded_word;
+	char	*full_str;
+	char	*temp_str;
 
 	i = 0;
 	quote_state = 0;
@@ -82,9 +82,9 @@ static char	*ft_str_add_char(char *str, char c)
 
 static char	*expand_dollar_sign(t_shell *shell, char *word, int *i)
 {
-	int     start;
-	char    *var_name;
-	char    *value;
+	int		start;
+	char	*var_name;
+	char	*value;
 
 	(*i)++;
 	if (word[*i] == '?')
