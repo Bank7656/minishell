@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 03:07:10 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 17:09:15 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:28:28 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_env	*init_env(char **envp)
 	env_list = NULL;
 	while (envp[i] != NULL)
 	{
-		splitted = ft_split(envp[i], '='); 
+		splitted = ft_split(envp[i], '=');
 		if (splitted == NULL)
 		{
 			free_env_list(env_list);
@@ -54,7 +54,10 @@ t_env	*create_env_node(char **splitted)
 	if (env_node == NULL)
 		return (NULL);
 	env_node -> name = ft_strdup(splitted[0]);
-	env_node -> value = ft_strdup(splitted[1]);
+	if (splitted[1] == NULL)
+		env_node -> value = ft_strdup("");
+	else
+		env_node -> value = ft_strdup(splitted[1]);
 	if (env_node -> name == NULL || env_node -> value == NULL)
 	{
 		free(env_node);
@@ -66,8 +69,8 @@ t_env	*create_env_node(char **splitted)
 
 void	add_env_to_list(t_env **head, t_env *env_node)
 {
-	t_env *trav;
-	
+	t_env	*trav;
+
 	if (*head == NULL)
 	{
 		*head = env_node;
