@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 02:43:23 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 17:41:20 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/23 01:40:26 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,11 @@ void	free_token_list(t_token *head)
 	}
 }
 
-void	*lexer_error(t_token *head, char *err_msg)
+void	*lexer_error(t_shell *shell, t_token *head, char *err_msg)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putendl_fd(err_msg, 2);
 	free_token_list(head);
+	shell -> last_exit_status = 1;
 	return (NULL);
 }

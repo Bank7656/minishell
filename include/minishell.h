@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 14:14:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 13:39:12 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/26 22:57:30 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
+# include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/ioctl.h>
 # include <sys/wait.h>
 
 # include "../libft/libft.h"
@@ -75,11 +77,10 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-
 typedef struct s_ast_node
 {
 	e_node_type			type;
-	struct s_ast_node	*left;    
+	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 	char				**args;
 	t_redir				*redir;
@@ -87,13 +88,13 @@ typedef struct s_ast_node
 
 typedef struct s_shell
 {
-	char		*line;
-	t_token		*token_head;
-	t_env		*env_lst;
-	t_ast_node	*ast_root;
-	int			last_exit_status;
+	struct termios	original_term;
+	char			*line;
+	t_token			*token_head;
+	t_env			*env_lst;
+	t_ast_node		*ast_root;
+	int				last_exit_status;
 }	t_shell;
-
 
 extern volatile sig_atomic_t	g_signal_status;
 
@@ -122,12 +123,9 @@ void			free_args_array(char **args);
 
 int				is_command_end(t_token *token);
 int				is_redirection(e_token_type type);
-
-
+void			parse_print_error(t_token *token);
 
 char			*get_full_command_path(char *cmd, t_env *env_lst);
-char			**get_env_path(t_env *env_lst);
-char			*check_each_path(char *cmd, char *path);
 
 int				execute_ast(t_shell *shell, t_ast_node *node);
 int				execute_command(t_shell *shell, t_ast_node *node);
@@ -137,7 +135,7 @@ int				execute_and(t_shell *shell, t_ast_node *node);
 int				execute_or(t_shell *shell, t_ast_node *node);
 int				execute_subshell(t_shell *shell, t_ast_node *node);
 
-
+int				is_builtin(char *cmd);
 int				execute_builtin(t_shell *shell, t_ast_node *node);
 int				execute_pwd(t_shell *shell, t_ast_node *node);
 int				execute_cd(t_shell *shell, t_ast_node *node);
@@ -159,6 +157,9 @@ void			free_and_exit(t_shell *shell, int exit_code);
 void			handle_sigint(int sig_num);
 
 t_list			*wildcard(t_shell *shell, char *pattern);
+
+pid_t			save_fork(void);
+int				get_exit_status(int status);
 
 
 //debug

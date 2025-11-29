@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:57:20 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 16:45:51 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/26 22:29:41 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ t_token	*lexer(t_shell *shell, char *line)
 		while (ft_isspace(line[i]))
 			i++;
 		if (line[i] == '\0')
-			break;
+			break ;
 		len = handle_metacharacter(shell, &head, line, i);
 		if (len == 0)
 		{
 			len = handle_word(shell, &head, line, i);
 		}
 		if (len == 0)
-			return (lexer_error(head, "syntax error: unclosed quote"));
+			return (lexer_error(shell, head, "syntax error: unclosed quote"));
 		i += len;
 	}
 	return (head);
@@ -63,7 +63,7 @@ int	handle_word(t_shell *shell, t_token **head, char *line, int i)
 	{
 		quote_char = line[i];
 		i++;
-		while(line[i] != '\0' && line[i] != quote_char)
+		while (line[i] != '\0' && line[i] != quote_char)
 			i++;
 		if (line[i] == '\0')
 			return (0);
@@ -78,10 +78,8 @@ int	handle_word(t_shell *shell, t_token **head, char *line, int i)
 	word = ft_substr(&line[start_index], 0, i - start_index);
 	if (word == NULL)
 		return (0);
-	// add_token_to_lst(head, create_token(shell, WORD, word)); 
 	if (append_token(shell, head, WORD, word) == -1)
 		return (-1);
 	free(word);
 	return (i - start_index);
 }
-

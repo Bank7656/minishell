@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 23:19:11 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 13:40:58 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/23 02:18:49 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,14 @@ int	is_redirection(e_token_type type)
 		return (1);
 	else
 		return (0);
+}
+
+void	parse_print_error(t_token *token)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token '", 2);
+	if (token == NULL)
+		ft_putstr_fd("newline", 2);
+	else
+		ft_putstr_fd(token->value, 2);
+	ft_putendl_fd("'", 2);
 }

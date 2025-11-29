@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 08:41:43 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 17:09:31 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/26 22:31:19 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ int	execute_cd(t_shell *shell, t_ast_node *node)
 	}
 	if (path == NULL)
 	{
-		path = get_env_value(shell -> env_lst, "HOME"); 
+		path = get_env_value(shell -> env_lst, "HOME");
 		if (path == NULL)
 		{
 			ft_putendl_fd("minishell: cd: HOME not set", 2);
-			return(1);
+			return (1);
 		}
 	}
-	if (chdir(path) == -1)  
+	if (chdir(path) == -1)
 	{
 		perror("minishell: cd");
 		return (1);

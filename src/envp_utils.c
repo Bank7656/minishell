@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 09:34:15 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/21 23:25:11 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/26 22:30:09 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ char *get_env_value(t_env *env_lst, char *key)
 	}
 	return (NULL);
 }
-
 
 char	**convert_env_to_array(t_env *env_lst, int mode)
 {
@@ -69,7 +68,7 @@ char	**convert_env_to_array(t_env *env_lst, int mode)
 			{
 				free_args_array(args);
 				return (NULL);
-			}  
+			}
 			i++;
 		}
 		trav = trav -> next;

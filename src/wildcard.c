@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 20:25:36 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 13:35:39 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 21:57:22 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static bool	is_matching_wildcard(char *pattern, char *filename);
 
 t_list	*wildcard(t_shell *shell, char *pattern)
 {
-	t_list			*filename_lst;
 	DIR				*dir_steam;
+	t_list			*filename_lst;
 	struct dirent	*dir_entry;
 
 	dir_steam = opendir(".");

@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 22:57:14 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 01:32:22 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/23 02:18:40 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 static void	init_shell_signal_handler(void);
 
-t_shell *init_shell(char **envp)
+t_shell	*init_shell(char **envp)
 {
-	t_shell *shell;
+	t_shell			*shell;
+	struct termios	term;
 
 	shell = (t_shell *)malloc(sizeof(t_shell));
 	if (shell == NULL)
@@ -26,6 +27,10 @@ t_shell *init_shell(char **envp)
 		return (NULL);
 	shell -> ast_root = NULL;
 	shell -> token_head = NULL;
+	tcgetattr(STDIN_FILENO, &term);
+	shell -> original_term = term;
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &term);
 	init_shell_signal_handler();
 	return (shell);
 }

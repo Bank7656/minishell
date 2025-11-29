@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 02:27:50 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 00:08:38 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/26 22:49:13 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ int	execute_subshell(t_shell *shell, t_ast_node *node)
 			exit_status = 128 + WTERMSIG(status);
 		else
 			exit_status = 1;
-		return (exit_status); 
+		return (exit_status);
 	}
 }

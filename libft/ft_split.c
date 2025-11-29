@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 18:04:59 by thacharo          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:23 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/29 15:23:10 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static int	count_words(char const *s, char c)
 
 	i = 0;
 	count = 0;
+	if (s == NULL)
+		return (0);
 	len = ft_strlen(s);
 	while (i < len)
 	{

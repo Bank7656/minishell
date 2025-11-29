@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 14:51:20 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 13:52:21 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/23 00:43:52 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,5 @@ void	print_env_lst(t_env *env_lst)
 			ft_putendl_fd(trav -> value, 1);
 		}
 		trav = trav -> next;
-	} 
+	}
 }

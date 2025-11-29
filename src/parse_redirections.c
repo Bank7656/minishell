@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 17:36:02 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 13:42:26 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/23 13:53:49 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 
 int			parse_heredoc(char *delimeter);
-static void	parser_print_error(t_token *token);
 
 void	add_redir_back(t_redir **lst, t_redir *new);
 
@@ -25,7 +24,7 @@ int	parse_redirection(t_token **tokens, t_redir **redir_list)
 
 	if ((*tokens) -> next == NULL || (*tokens) -> next -> type != WORD)
 	{
-		parser_print_error((*tokens) -> next);
+		parse_print_error((*tokens) -> next);
 		return (0);
 	}
 	redir_node  = malloc(sizeof(t_redir));
@@ -56,6 +55,7 @@ int	parse_redirection(t_token **tokens, t_redir **redir_list)
 
 int	parse_heredoc(char *delimeter)
 {
+	int		nbytes;
 	int		pipe_fd[2];
 	char	*line;
 
@@ -67,6 +67,8 @@ int	parse_heredoc(char *delimeter)
 	while (true)
 	{
 		line = readline("> ");
+		if (g_signal_status != 0)
+			return (-1);
 		if (line == NULL || ft_strncmp(line, delimeter, -1) == 0)
 		{
 			free(line);
@@ -78,18 +80,6 @@ int	parse_heredoc(char *delimeter)
 	close(pipe_fd[1]);
 	return (pipe_fd[0]);
 }
-
-static void	parser_print_error(t_token *token)
-{
-	ft_putstr_fd("minishell: syntax error near unexpected token '", 2);
-	if (token == NULL)
-		ft_putstr_fd("newline", 2);
-	else
-		ft_putstr_fd(token->value, 2);
-	ft_putendl_fd("'", 2);
-}
-
-
 
 void	add_redir_back(t_redir **lst, t_redir *new)
 {

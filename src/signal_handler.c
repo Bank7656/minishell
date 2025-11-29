@@ -6,13 +6,13 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 13:30:34 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 00:11:24 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/23 02:18:26 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    handle_sigint(int sig_num)
+void	handle_sigint(int sig_num)
 {
 	(void)sig_num;
 

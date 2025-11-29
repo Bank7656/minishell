@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 16:22:55 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 00:16:27 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/22 18:43:26 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	free_and_exit(t_shell *shell, int exit_code)
 		free_inloop(shell);
 		if (shell -> env_lst != NULL)
 			free_env_list(shell -> env_lst);
+		tcsetattr(STDIN_FILENO, TCSAFLUSH, &shell->original_term);
 		free(shell);
 	}
 	rl_clear_history();

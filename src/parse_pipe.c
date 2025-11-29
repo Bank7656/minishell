@@ -6,7 +6,7 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 01:12:09 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 15:16:32 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/23 01:23:11 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right);
 
-t_ast_node  *parse_pipe(t_shell *shell, t_token **tokens)
+t_ast_node	*parse_pipe(t_shell *shell, t_token **tokens)
 {
-	t_ast_node  *left_node;
-	t_ast_node  *pipe_node;
-	t_ast_node  *right_node;
+	t_ast_node	*left_node;
+	t_ast_node	*pipe_node;
+	t_ast_node	*right_node;
 
 	left_node = parse_subshell(shell, tokens);
 	if (left_node == NULL)
@@ -28,7 +28,7 @@ t_ast_node  *parse_pipe(t_shell *shell, t_token **tokens)
 		(*tokens) = (*tokens) -> next;
 		if (*tokens == NULL || (*tokens) -> type == PIPE)
 		{
-			ft_putendl_fd("minishell: syntax error near unexpected token '|'", 2);
+			parse_print_error(*tokens);
 			shell -> last_exit_status = 2;
 			free_ast_tree(left_node);
 			return (NULL);

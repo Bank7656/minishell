@@ -34,6 +34,7 @@ SRC = main.c \
 	envp_utils.c \
 	execute.c \
 	execute_command.c \
+	execute_paths.c \
 	execute_redirections.c \
 	execute_pipeline.c \
 	execute_logical.c \
@@ -48,6 +49,7 @@ SRC = main.c \
 	execute_unset.c \
 	signal_handler.c \
 	debug.c \
+	syscall_utils.c \
 	clear.c
 
 OBJECTS = $(SRC:.c=.o)

@@ -6,11 +6,13 @@
 /*   By: thacharo <thacharo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 00:55:27 by thacharo          #+#    #+#             */
-/*   Updated: 2025/11/22 13:50:23 by thacharo         ###   ########.fr       */
+/*   Updated: 2025/11/26 22:47:32 by thacharo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	apply_redirection(e_token_type type, int fd);
 
 int	handle_redirections(t_redir *redir_lst)
 {
@@ -21,7 +23,6 @@ int	handle_redirections(t_redir *redir_lst)
 	while (trav != NULL)
 	{
 		fd = -1;
-	
 		if (trav -> type == REDIR_OUT)
 			fd = open(trav -> value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else if (trav -> type == APPEND)
@@ -35,18 +36,28 @@ int	handle_redirections(t_redir *redir_lst)
 			perror("minishell");
 			return (-1);
 		}
-		if (trav -> type == REDIR_IN || trav -> type == HEREDOC)
+		if (apply_redirection(trav -> type, fd))
 		{
-			if (dup2(fd, STDIN_FILENO) == -1)
-				perror("minishell: dup2");
+			perror("minishell: dup2");
+			return (-1);
 		}
-		if (trav -> type == REDIR_OUT || trav -> type == APPEND)
-		{
-			if (dup2(fd, STDOUT_FILENO) == -1)
-				perror("minishell: dup2");
-		}
-		close(fd);
 		trav = trav -> next;
 	}
+	return (0);
+}
+
+static int	apply_redirection(e_token_type type, int fd)
+{
+	if (type == REDIR_IN || type == HEREDOC)
+	{
+		if (dup2(fd, STDIN_FILENO) == -1)
+			return (1);
+	}
+	if (type == REDIR_OUT || type == APPEND)
+	{
+		if (dup2(fd, STDOUT_FILENO) == -1)
+			return (1);
+	}
+	close(fd);
 	return (0);
 }
